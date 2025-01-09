@@ -13,11 +13,18 @@ import com.blahblah.accounts.dto.ErrorResponseDto;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(CustomerAlreadyExistsException.class)
+	@ExceptionHandler(value = CustomerAlreadyExistsException.class)
 	public ResponseEntity<ErrorResponseDto> handleCustomerAlreadyExistsException(
 			CustomerAlreadyExistsException exception, WebRequest webRequest) {
 		return new ResponseEntity<>(new ErrorResponseDto(webRequest.getDescription(false), HttpStatus.BAD_REQUEST,
 				exception.getMessage(), LocalDateTime.now()), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(value = ResourceNotFoundException.class)
+	public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException exception,
+			WebRequest webRequest) {
+		return new ResponseEntity<>(new ErrorResponseDto(webRequest.getDescription(false), HttpStatus.NOT_FOUND,
+				exception.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
 	}
 
 }

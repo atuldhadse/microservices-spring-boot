@@ -9,4 +9,10 @@ public interface IAccountsService {
 	 */
 	void createAccount(CustomerDto customerDto);
 
+	/**
+	 * @param mobileNumber
+	 * @return CustomerDto Object
+	 */
+	CustomerDto fetch(String mobileNumber);
+
 }
