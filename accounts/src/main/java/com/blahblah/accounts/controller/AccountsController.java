@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,30 @@ public class AccountsController {
 	public ResponseEntity<CustomerDto> fetch(@RequestParam(required = true) String mobileNumber) {
 		CustomerDto customerDto = iAccountsService.fetch(mobileNumber);
 		return ResponseEntity.status(HttpStatus.OK).body(customerDto);
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<ResponseDto> update(@RequestBody CustomerDto customerDto) {
+		boolean updated = iAccountsService.updateAccount(customerDto);
+		if (Boolean.TRUE.equals(updated)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_UPDATE));
+		}
+	}
+
+	@PutMapping("/delete")
+	public ResponseEntity<ResponseDto> delete(@RequestParam String mobileNumber) {
+		boolean deleted = iAccountsService.deleteAccount(mobileNumber);
+		if (Boolean.TRUE.equals(deleted)) {
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
+		} else {
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE));
+		}
 	}
 
 }
